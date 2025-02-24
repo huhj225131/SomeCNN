@@ -55,6 +55,7 @@ def train_test_model(model, train_dataloader,test_dataloader, loss_fn, accuracy_
     print(f"Epoch: {epoch} | Train loss: {train_loss} | Train accuracy: {train_acc} | Test loss: {test_loss} | Test_acc: {test_acc}")
   return train_acc_per_epoch, test_acc_per_epoch
 
+# Plot training progress
 def plot_trainning_progress(train, test):
   pic = plt.figure(figsize=(10,9))
   pic.add_subplot(1, 2, 1)
@@ -66,14 +67,20 @@ def plot_trainning_progress(train, test):
   plt.show()
 
 # Xavier initialization
-def init_cnn(module):
-    if type(module) == nn.Linear or type(module) == nn.Conv2d:
+def init_cnn_xavier(module):
+    if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):
         nn.init.xavier_uniform_(module.weight)
+    if module.bias is not None:  # Ensure bias is created
+        nn.init.constant_(module.bias, 0)
 
 # He initialization
 # Base on output channels to compute variance (fan_out), and with relu variance = 2 / fan_out
-# Usually use for CNN model, with Fully Connected use fan_in
-def init_cnn(module):
-   if type(module) == nn.Linear or type(module) == nn.Conv2d:
+# Usually use for CNN model, with Fully Connected use fan_in maybe because CNN model usually has output bigger than input
+def init_cnn_he(module):
+    if isinstance(module, nn.Conv2d):
         nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu') 
+    if isinstance(module, nn.Linear):
+       nn.init.kaiming_normal_(module.weight, mode='fan_in', nonlinearity='relu') 
+    if module.bias is not None:  # Ensure bias is created
+        nn.init.constant_(module.bias, 0)
     
