@@ -70,3 +70,10 @@ def init_cnn(module):
     if type(module) == nn.Linear or type(module) == nn.Conv2d:
         nn.init.xavier_uniform_(module.weight)
 
+# He initialization
+# Base on output channels to compute variance (fan_out), and with relu variance = 2 / fan_out
+# Usually use for CNN model, with Fully Connected use fan_in
+def init_cnn(module):
+   if type(module) == nn.Linear or type(module) == nn.Conv2d:
+        nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu') 
+    
