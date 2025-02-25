@@ -70,17 +70,19 @@ def plot_trainning_progress(train, test):
 def init_cnn_xavier(module):
     if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):
         nn.init.xavier_uniform_(module.weight)
-    if module.bias is not None:  # Ensure bias is created
-        nn.init.constant_(module.bias, 0)
+        if module.bias is not None:  # Ensure bias is created
+            nn.init.constant_(module.bias, 0)
 
 # He initialization
 # Base on output channels to compute variance (fan_out), and with relu variance = 2 / fan_out
 # Usually use for CNN model, with Fully Connected use fan_in maybe because CNN model usually has output bigger than input
 def init_cnn_he(module):
     if isinstance(module, nn.Conv2d):
-        nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu') 
+        nn.init.kaiming_normal_(module.weight, mode='fan_out', nonlinearity='relu')
+        if module.bias is not None:  # Ensure bias is created
+            nn.init.constant_(module.bias, 0) 
     if isinstance(module, nn.Linear):
-       nn.init.kaiming_normal_(module.weight, mode='fan_in', nonlinearity='relu') 
-    if module.bias is not None:  # Ensure bias is created
-        nn.init.constant_(module.bias, 0)
+        nn.init.kaiming_normal_(module.weight, mode='fan_in', nonlinearity='relu') 
+        if module.bias is not None:  # Ensure bias is created
+           nn.init.constant_(module.bias, 0)
     
