@@ -13,7 +13,7 @@ def accuracy_fn(y_test, y_true):
 def train_model(model, train_dataloader, loss_fn, accuracy_fn, optimizer, device='cpu'):
   model.to(device)
   train_loss, train_acc = 0, 0
-  for batch, (X, y) in enumerate(train_dataloader):
+  for  X, y in train_dataloader:
     X, y = X.to(device), y.to(device)
     model.train()
     y_pred = model(X)
@@ -56,12 +56,14 @@ def train_test_model(model, train_dataloader,test_dataloader, loss_fn, accuracy_
   return train_acc_per_epoch, test_acc_per_epoch
 
 # Plot training progress
-def plot_trainning_progress(train, test):
+def plot_training_progress(train, test):
   pic = plt.figure(figsize=(10,9))
   pic.add_subplot(1, 2, 1)
+  plt.ylim(0, 100)
   plt.plot(train, label="Train accuracy")
   plt.legend()
   pic.add_subplot(1,2,2)
+  plt.ylim(0, 100)
   plt.plot(test,label = "Test accuracy", c='orange')
   plt.legend()
   plt.show()
